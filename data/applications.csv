@@ -1,0 +1,86 @@
+application_id,company,location,remote_option,org_type,company_size,role_type,source,applied_on,stage,days_to_response,flagged_skill_gap
+APP-001,Deloitte,Bangalore,False,IT Consulting,MNC,Data Analytics,LinkedIn,2026-03-07,HR Interview,11.0,Docker
+APP-002,TCS,Chennai,False,IT Services,MNC,Data Science,Naukri,2026-04-05,Applied,,LlamaIndex
+APP-003,Cognizant,Chennai,True,IT Services,MNC,AI/ML Engineering,Instahyre,2026-07-18,Rejected After Screening,18.0,Spark
+APP-004,MNJ Software,Bangalore,True,Services,Small,Data Science,LinkedIn,2026-03-08,HR Interview,5.0,Vector Databases
+APP-005,TCS,Chennai,True,IT Services,MNC,Data Science,Campus/Off-campus Drive,2026-08-02,Rejected - No Response,10.0,AWS
+APP-006,Mphasis,Bangalore,False,IT Services,MNC,Data Analytics,Instahyre,2026-07-18,Applied,,Vector Databases
+APP-007,Microsoft,Bangalore,True,Product,MNC,Software Engineering,Campus/Off-campus Drive,2026-05-11,Applied,,
+APP-008,Microgreen Technologies,Mangaluru,False,Services,Small,Data Analytics,Naukri,2026-06-17,Rejected - No Response,17.0,Docker
+APP-009,Invenger Technologies,Mangaluru,True,Services,Small,Software Engineering,Naukri,2026-05-26,Rejected After Screening,6.0,LlamaIndex
+APP-010,MRPL,Mangaluru,False,Core/PSU,Large,Software Engineering,LinkedIn,2026-05-31,Applied,,Spark
+APP-011,HARMAN,Bangalore,False,Product,MNC,Data Science,LinkedIn,2026-06-26,HR Interview,5.0,LlamaIndex
+APP-012,MRPL,Mangaluru,False,Core/PSU,Large,Data Analytics,LinkedIn,2026-07-20,Applied,,
+APP-013,Deloitte,Bangalore,False,IT Consulting,MNC,Software Engineering,Campus/Off-campus Drive,2026-06-01,Applied,,Vector Databases
+APP-014,PwC,Bangalore,False,IT Consulting,MNC,IT Consulting,LinkedIn,2026-03-12,Applied,,Vector Databases
+APP-015,OmneNEST Technologies,Mangaluru,True,Services,Small,Software Engineering,Company Website,2026-03-21,Rejected - No Response,6.0,
+APP-016,Robosoft Technologies,Mangaluru,False,Product,Mid-size,Software Engineering,Referral,2026-05-11,Applied,,System Design
+APP-017,NextAstra Technologies,Pune,False,Product,Startup,IT Consulting,Naukri,2026-06-03,Online Assessment,12.0,Vector Databases
+APP-018,Cognizant,Chennai,False,IT Services,MNC,Data Science,Company Website,2026-03-19,Applied,,System Design
+APP-019,Infosys,Bangalore,True,IT Services,MNC,Data Analytics,Campus/Off-campus Drive,2026-05-02,Rejected - No Response,8.0,Kubernetes
+APP-020,MRPL,Mangaluru,True,Core/PSU,Large,AI/ML Engineering,Company Website,2026-07-21,Rejected - No Response,9.0,System Design
+APP-021,Raktrix Technologies,Bangalore,True,Startup,Startup,AI/ML Engineering,LinkedIn,2026-04-28,Applied,,
+APP-022,Raktrix Technologies,Bangalore,True,Startup,Startup,IT Consulting,Referral,2026-05-08,Online Assessment,2.0,Vector Databases
+APP-023,Capgemini,Bangalore,True,IT Services,MNC,Data Science,Instahyre,2026-05-20,Online Assessment,14.0,System Design
+APP-024,Wipro,Bangalore,True,IT Services,MNC,Data Science,Referral,2026-06-26,Rejected - No Response,13.0,Docker
+APP-025,Invenger Technologies,Mangaluru,False,Services,Small,AI/ML Engineering,Naukri,2026-07-22,Rejected After Screening,5.0,Docker
+APP-026,Persistent Systems,Pune,False,Product,Mid-size,Data Analytics,Campus/Off-campus Drive,2026-06-18,Online Assessment,7.0,Tableau
+APP-027,NextAstra Technologies,Pune,False,Product,Startup,AI/ML Engineering,Naukri,2026-04-05,Rejected - No Response,9.0,Kubernetes
+APP-028,Novigo Solutions,Mangaluru,True,Product,Small,Software Engineering,LinkedIn,2026-03-29,Online Assessment,5.0,System Design
+APP-029,Infosys,Bangalore,False,IT Services,MNC,Software Engineering,Instahyre,2026-06-17,Rejected - No Response,8.0,LlamaIndex
+APP-030,MRPL,Mangaluru,False,Core/PSU,Large,Software Engineering,Referral,2026-07-31,Technical Interview,6.0,AWS
+APP-031,HARMAN,Bangalore,False,Product,MNC,Data Analytics,Campus/Off-campus Drive,2026-03-03,Online Assessment,4.0,SQL Advanced
+APP-032,Robosoft Technologies,Mangaluru,False,Product,Mid-size,AI/ML Engineering,Instahyre,2026-07-16,Rejected After Screening,5.0,
+APP-033,Deloitte,Bangalore,False,IT Consulting,MNC,AI/ML Engineering,Company Website,2026-03-29,Applied,,Tableau
+APP-034,Infosys,Bangalore,False,IT Services,MNC,AI/ML Engineering,Referral,2026-03-01,Rejected - No Response,5.0,
+APP-035,Persistent Systems,Pune,True,Product,Mid-size,Data Analytics,Company Website,2026-07-07,Online Assessment,6.0,AWS
+APP-036,Robosoft Technologies,Mangaluru,False,Product,Mid-size,Data Science,Instahyre,2026-05-16,Rejected - No Response,2.0,AWS
+APP-037,Accenture,Bangalore,False,IT Consulting,MNC,Data Analytics,Naukri,2026-04-09,HR Interview,6.0,
+APP-038,Infosys,Bangalore,True,IT Services,MNC,Software Engineering,Campus/Off-campus Drive,2026-07-14,Rejected After Screening,9.0,Spark
+APP-039,Raktrix Technologies,Bangalore,True,Startup,Startup,Data Science,Referral,2026-03-05,Rejected - No Response,7.0,
+APP-040,NextAstra Technologies,Pune,True,Product,Startup,Data Analytics,Company Website,2026-05-01,Applied,,Vector Databases
+APP-041,Capgemini,Bangalore,False,IT Services,MNC,Software Engineering,LinkedIn,2026-03-22,Rejected - No Response,7.0,Kubernetes
+APP-042,Novigo Solutions,Mangaluru,True,Product,Small,Software Engineering,Campus/Off-campus Drive,2026-04-02,Offer,9.0,System Design
+APP-043,Wipro,Bangalore,False,IT Services,MNC,Software Engineering,Campus/Off-campus Drive,2026-04-12,Online Assessment,12.0,AWS
+APP-044,Accenture,Bangalore,False,IT Consulting,MNC,Software Engineering,Referral,2026-04-24,Rejected After Screening,4.0,
+APP-045,Persistent Systems,Pune,False,Product,Mid-size,Data Science,Instahyre,2026-04-21,Online Assessment,4.0,Docker
+APP-046,MRPL,Mangaluru,False,Core/PSU,Large,Software Engineering,Instahyre,2026-06-04,Rejected After Screening,5.0,
+APP-047,Zoho,Chennai,True,Product,MNC,Software Engineering,Referral,2026-03-31,Applied,,Vector Databases
+APP-048,Novigo Solutions,Mangaluru,False,Product,Small,Software Engineering,Company Website,2026-03-06,Applied,,AWS
+APP-049,TCS,Chennai,True,IT Services,MNC,Software Engineering,Campus/Off-campus Drive,2026-04-26,Rejected - No Response,4.0,LlamaIndex
+APP-050,PwC,Bangalore,True,IT Consulting,MNC,AI/ML Engineering,Instahyre,2026-03-16,Applied,,LlamaIndex
+APP-051,Winman Software,Mangaluru,False,Product,Mid-size,Software Engineering,Company Website,2026-03-19,Online Assessment,6.0,Vector Databases
+APP-052,HARMAN,Bangalore,True,Product,MNC,Software Engineering,Instahyre,2026-07-03,Applied,,AWS
+APP-053,Invenger Technologies,Mangaluru,False,Services,Small,Data Science,Instahyre,2026-07-25,Technical Interview,9.0,Kubernetes
+APP-054,TCS,Chennai,True,IT Services,MNC,Data Analytics,Referral,2026-06-13,Online Assessment,12.0,LlamaIndex
+APP-055,Robosoft Technologies,Mangaluru,False,Product,Mid-size,AI/ML Engineering,Instahyre,2026-06-19,Online Assessment,5.0,Tableau
+APP-056,MNJ Software,Bangalore,False,Services,Small,AI/ML Engineering,Referral,2026-03-14,Rejected After Screening,9.0,System Design
+APP-057,Deloitte,Bangalore,False,IT Consulting,MNC,Data Science,LinkedIn,2026-03-16,Rejected After Screening,21.0,SQL Advanced
+APP-058,Raktrix Technologies,Bangalore,True,Startup,Startup,Data Science,LinkedIn,2026-05-03,Rejected After Screening,10.0,Vector Databases
+APP-059,Freshworks,Chennai,False,Product,MNC,Data Analytics,Referral,2026-04-05,Online Assessment,13.0,RAG Pipelines
+APP-060,HARMAN,Bangalore,True,Product,MNC,Software Engineering,Referral,2026-05-03,Applied,,Kubernetes
+APP-061,Microgreen Technologies,Mangaluru,True,Services,Small,Data Analytics,Campus/Off-campus Drive,2026-03-26,Applied,,System Design
+APP-062,Freshworks,Chennai,True,Product,MNC,Data Science,LinkedIn,2026-03-24,HR Interview,10.0,RAG Pipelines
+APP-063,MNJ Software,Bangalore,True,Services,Small,AI/ML Engineering,Referral,2026-07-02,Rejected After Screening,8.0,
+APP-064,MRPL,Mangaluru,False,Core/PSU,Large,Software Engineering,LinkedIn,2026-04-12,Applied,,LangChain
+APP-065,MRPL,Mangaluru,False,Core/PSU,Large,Software Engineering,Company Website,2026-06-25,Applied,,Tableau
+APP-066,PwC,Bangalore,False,IT Consulting,MNC,Data Science,Instahyre,2026-07-21,Rejected After Screening,17.0,SQL Advanced
+APP-067,Wipro,Bangalore,False,IT Services,MNC,IT Consulting,Naukri,2026-04-18,HR Interview,6.0,Vector Databases
+APP-068,Winman Software,Mangaluru,True,Product,Mid-size,IT Consulting,Campus/Off-campus Drive,2026-07-17,Rejected - No Response,12.0,SQL Advanced
+APP-069,Raktrix Technologies,Bangalore,False,Startup,Startup,IT Consulting,LinkedIn,2026-03-13,Technical Interview,4.0,Kubernetes
+APP-070,Zoho,Chennai,True,Product,MNC,Data Analytics,Campus/Off-campus Drive,2026-04-10,Applied,,AWS
+APP-071,Novigo Solutions,Mangaluru,False,Product,Small,Software Engineering,Naukri,2026-03-18,HR Interview,2.0,LlamaIndex
+APP-072,Cognizant,Chennai,True,IT Services,MNC,Software Engineering,Naukri,2026-06-12,Applied,,
+APP-073,Capgemini,Bangalore,False,IT Services,MNC,Software Engineering,Naukri,2026-07-27,Offer,8.0,LangChain
+APP-074,Accenture,Bangalore,False,IT Consulting,MNC,Software Engineering,LinkedIn,2026-06-16,Rejected After Screening,3.0,Spark
+APP-075,Capgemini,Bangalore,False,IT Services,MNC,Data Analytics,Campus/Off-campus Drive,2026-05-20,Applied,,Vector Databases
+APP-076,Cognizant,Chennai,True,IT Services,MNC,AI/ML Engineering,Instahyre,2026-05-20,Online Assessment,10.0,Docker
+APP-077,MRPL,Mangaluru,False,Core/PSU,Large,Software Engineering,Naukri,2026-05-16,Rejected After Screening,6.0,Power BI
+APP-078,OmneNEST Technologies,Mangaluru,False,Services,Small,Data Science,LinkedIn,2026-03-03,Rejected - No Response,12.0,Spark
+APP-079,Capgemini,Bangalore,False,IT Services,MNC,Data Analytics,LinkedIn,2026-03-19,Rejected - No Response,11.0,Vector Databases
+APP-080,Zoho,Chennai,False,Product,MNC,Data Science,Company Website,2026-04-03,Online Assessment,2.0,
+APP-081,Novigo Solutions,Mangaluru,False,Product,Small,Data Science,Naukri,2026-06-03,Rejected - No Response,4.0,RAG Pipelines
+APP-082,Microsoft,Bangalore,False,Product,MNC,Data Science,Campus/Off-campus Drive,2026-05-17,Applied,,
+APP-083,Deloitte,Bangalore,False,IT Consulting,MNC,Software Engineering,Campus/Off-campus Drive,2026-03-03,Rejected - No Response,11.0,
+APP-084,Freshworks,Chennai,True,Product,MNC,Software Engineering,Company Website,2026-03-27,HR Interview,1.0,Docker
+APP-085,Robosoft Technologies,Mangaluru,True,Product,Mid-size,Data Science,LinkedIn,2026-07-20,Rejected - No Response,8.0,Docker
