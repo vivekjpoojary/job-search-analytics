@@ -1,0 +1,99 @@
+# 📊 Job Search Analytics Dashboard
+
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B?logo=streamlit)
+![Plotly](https://img.shields.io/badge/Plotly-5.20%2B-3F4F75?logo=plotly)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+An interactive, Power BI/Tableau-style analytics dashboard — built entirely in
+Python — that tracks and visualizes a fresher tech job search: application
+funnel conversion, response times, most-flagged skill gaps, and role/location
+trends.
+
+**Why this project?** As a fresher applying for Data Science / Analytics /
+Software Engineering roles, I wanted to *apply* data analytics rather than
+just list it as a skill — so I built a tool to track my own application
+pipeline the way a recruiter or BI analyst would track a sales funnel.
+
+🔗 **Live demo:** _add your deployed Streamlit Cloud link here_
+🔗 **Portfolio:** [vivekjpoojary.vercel.app](https://vivekjpoojary.vercel.app)
+
+---
+
+## Features
+
+- **KPI summary** — total applications, response rate, interview conversion, offers, avg. response time
+- **Application funnel** — Applied → Online Assessment → Technical → HR → Offer
+- **Outcome breakdown** — donut chart of application outcomes
+- **Timeline** — weekly application volume
+- **Role type distribution** — Data Science / Analytics / SWE / AI-ML / IT Consulting
+- **Skill-gap frequency** — most commonly flagged missing skills across rejections
+- **Response rate by company type** — MNC vs Startup vs Mid-size vs Services
+- **Interactive filters** — role type, location, remote-only toggle
+- **Raw data explorer** — sortable/filterable table of all records
+
+## Tech Stack
+
+| Layer | Tool |
+|---|---|
+| Language | Python 3 |
+| Dashboard framework | Streamlit |
+| Visualization | Plotly |
+| Data handling | Pandas / NumPy |
+
+## Project Structure
+
+```
+job-search-analytics/
+├── app.py                  # Streamlit dashboard app
+├── data/
+│   ├── generate_data.py    # Synthetic dataset generator
+│   └── applications.csv    # Generated dataset
+├── .streamlit/
+│   └── config.toml         # Theme config
+├── requirements.txt
+└── README.md
+```
+
+## Running Locally
+
+```bash
+git clone https://github.com/Vivekjpoojary/job-search-analytics.git
+cd job-search-analytics
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+The app will open at `http://localhost:8501`.
+
+## Regenerating the Dataset
+
+The included `data/applications.csv` is **synthetic data** (randomly
+generated with realistic distributions) — not real personal application
+records, since actual application details aren't meant for a public repo.
+To regenerate it with different parameters:
+
+```bash
+cd data
+python generate_data.py
+```
+
+## Deployment
+
+This app deploys for free on [Streamlit Community Cloud](https://streamlit.io/cloud):
+1. Push this repo to GitHub
+2. Go to share.streamlit.io → New app → select this repo → `app.py`
+3. Deploy, then paste the live link back into this README
+
+## Roadmap / Ideas for Extension
+
+- [ ] Connect to a live Google Sheets tracker instead of static CSV
+- [ ] Add a "predicted response likelihood" model (ties into ML skills)
+- [ ] Export filtered view as PDF report
+- [ ] Add SQL backend (SQLite) instead of CSV for a data-engineering angle
+
+## Author
+
+**Vivek J Poojary**
+BCA Graduate, St. Aloysius (Deemed to be University), Mangaluru
+[GitHub](https://github.com/Vivekjpoojary) · [LinkedIn](https://linkedin.com/in/vivekjpoojary) · [Portfolio](https://vivekjpoojary.vercel.app)
