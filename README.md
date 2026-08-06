@@ -15,7 +15,6 @@ Software Engineering roles, I wanted to *apply* data analytics rather than
 just list it as a skill — so I built a tool to track my own application
 pipeline the way a recruiter or BI analyst would track a sales funnel.
 
-🔗 **Live demo:** _add your deployed Streamlit Cloud link here_
 🔗 **Portfolio:** [vivekjpoojary.vercel.app](https://vivekjpoojary.vercel.app)
 
 ---
