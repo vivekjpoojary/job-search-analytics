@@ -36,7 +36,8 @@ REJECTED_STAGES = ["Rejected - No Response", "Rejected After Screening"]
 
 
 @st.cache_data
-def load_data():
+def load_data() -> pd.DataFrame:
+    """Load application records from CSV file with parsed datetime columns."""
     df = pd.read_csv(DATA_PATH, parse_dates=["applied_on"])
     return df
 
