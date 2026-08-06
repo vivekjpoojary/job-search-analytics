@@ -5,3 +5,7 @@ venv/
 .env
 .DS_Store
 .streamlit/secrets.toml
+*.log
+.vscode/
+.idea/
+
