@@ -115,7 +115,15 @@ def generate_applications(n=85):
 
 
 if __name__ == "__main__":
-    df = generate_applications(85)
-    df.to_csv("applications.csv", index=False)
-    print(f"Generated {len(df)} synthetic application records -> applications.csv")
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Generate synthetic job application dataset.")
+    parser.add_argument("-n", "--num-records", type=int, default=85, help="Number of records to generate (default: 85)")
+    parser.add_argument("-o", "--output", type=str, default="applications.csv", help="Output CSV filepath")
+    args = parser.parse_args()
+
+    df = generate_applications(args.num_records)
+    df.to_csv(args.output, index=False)
+    print(f"Generated {len(df)} synthetic application records -> {args.output}")
     print(df.head())
+
