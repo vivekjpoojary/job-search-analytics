@@ -68,15 +68,22 @@ def filter_applications(
     locations: List[str],
     remote_only: bool = False,
     date_range: Optional[Tuple[pd.Timestamp, pd.Timestamp]] = None,
+    search_term: Optional[str] = None,
 ) -> pd.DataFrame:
-    """Filter job applications DataFrame based on role, location, remote flag, and date range."""
+    """Filter job applications DataFrame based on role, location, remote flag, date range, and search query."""
     filtered = df[df["role_type"].isin(roles) & df["location"].isin(locations)]
     if remote_only:
         filtered = filtered[filtered["remote_option"] == True]
     if date_range and len(date_range) == 2:
         start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
         filtered = filtered[(filtered["applied_on"] >= start_date) & (filtered["applied_on"] <= end_date)]
+    if search_term and search_term.strip():
+        term = search_term.strip().lower()
+        company_match = filtered["company"].astype(str).str.lower().str.contains(term)
+        skill_match = filtered["flagged_skill_gap"].astype(str).str.lower().str.contains(term)
+        filtered = filtered[company_match | skill_match]
     return filtered
+
 
 
 def calculate_kpis(df: pd.DataFrame) -> Dict[str, float]:
@@ -186,6 +193,7 @@ def main():
 
     # ---------------- Sidebar filters ----------------
     st.sidebar.header("Filters")
+    search_query = st.sidebar.text_input("🔍 Search Company / Skill", placeholder="e.g. TCS, Docker, AWS")
     role_filter = st.sidebar.multiselect(
         "Role type", sorted(df["role_type"].unique()), default=list(df["role_type"].unique())
     )
@@ -209,7 +217,9 @@ def main():
         locations=location_filter,
         remote_only=remote_only,
         date_range=date_range if isinstance(date_range, (list, tuple)) and len(date_range) == 2 else None,
+        search_term=search_query,
     )
+
 
     if filtered.empty:
         st.warning("No applications match the selected filters.")

@@ -76,6 +76,13 @@ class TestJobSearchAnalytics(unittest.TestCase):
         )
         self.assertTrue((role_df["role_type"] == subset_role[0]).all())
 
+        # Test search term filtering
+        search_df = filter_applications(
+            df, roles=all_roles, locations=all_locations, search_term="TCS"
+        )
+        self.assertTrue(all("TCS" in str(c) for c in search_df["company"]))
+
+
     def test_calculate_kpis(self):
         sample_data = pd.DataFrame(
             [
