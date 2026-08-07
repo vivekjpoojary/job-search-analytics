@@ -96,13 +96,18 @@ def calculate_kpis(df: pd.DataFrame) -> Dict[str, float]:
             "interviews": 0,
             "offers": 0,
             "avg_response_days": float("nan"),
+            "median_response_days": float("nan"),
+            "p90_response_days": float("nan"),
         }
 
     responded = df[~df["stage"].isin(["Applied"])].shape[0]
     response_rate = (responded / total_apps) * 100
     interviews = df[df["stage"].isin(["Technical Interview", "HR Interview", "Offer"])].shape[0]
     offers = df[df["stage"] == "Offer"].shape[0]
-    avg_response_days = df["days_to_response"].dropna().mean()
+    valid_resp = df["days_to_response"].dropna()
+    avg_response_days = valid_resp.mean() if not valid_resp.empty else float("nan")
+    median_response_days = valid_resp.median() if not valid_resp.empty else float("nan")
+    p90_response_days = valid_resp.quantile(0.9) if not valid_resp.empty else float("nan")
 
     return {
         "total_apps": total_apps,
@@ -110,7 +115,10 @@ def calculate_kpis(df: pd.DataFrame) -> Dict[str, float]:
         "interviews": interviews,
         "offers": offers,
         "avg_response_days": avg_response_days,
+        "median_response_days": median_response_days,
+        "p90_response_days": p90_response_days,
     }
+
 
 
 def funnel_counts(df: pd.DataFrame) -> pd.DataFrame:
@@ -227,13 +235,16 @@ def main():
 
     # ---------------- KPI row ----------------
     kpis = calculate_kpis(filtered)
-    k1, k2, k3, k4, k5 = st.columns(5)
+    k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("Total Applications", kpis["total_apps"])
     k2.metric("Response Rate", f"{kpis['response_rate']:.0f}%")
-    k3.metric("Interview Stage Reached", kpis["interviews"])
+    k3.metric("Interviews Reached", kpis["interviews"])
     k4.metric("Offers", kpis["offers"])
     avg_resp = kpis["avg_response_days"]
+    med_resp = kpis["median_response_days"]
     k5.metric("Avg. Response Time", f"{avg_resp:.0f} days" if pd.notna(avg_resp) else "—")
+    k6.metric("Median Response Time", f"{med_resp:.0f} days" if pd.notna(med_resp) else "—")
+
 
     # Key Insights Section
     insights = generate_insights(filtered)

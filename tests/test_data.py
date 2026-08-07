@@ -97,11 +97,15 @@ class TestJobSearchAnalytics(unittest.TestCase):
         self.assertEqual(kpis["interviews"], 2)
         self.assertEqual(kpis["offers"], 1)
         self.assertEqual(kpis["avg_response_days"], 10.0)
+        self.assertEqual(kpis["median_response_days"], 10.0)
+        self.assertAlmostEqual(kpis["p90_response_days"], 14.0)
 
         # Empty dataframe edge case
         empty_kpis = calculate_kpis(pd.DataFrame(columns=["stage", "days_to_response"]))
         self.assertEqual(empty_kpis["total_apps"], 0)
         self.assertTrue(math.isnan(empty_kpis["avg_response_days"]))
+        self.assertTrue(math.isnan(empty_kpis["median_response_days"]))
+
 
     def test_calculate_company_response_rates(self):
         sample_data = pd.DataFrame(
