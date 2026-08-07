@@ -33,7 +33,25 @@ STAGE_ORDER = [
     "Offer",
 ]
 
-REJECTED_STAGES = ["Rejected - No Response", "Rejected After Screening"]
+def inject_custom_css():
+    """Inject custom CSS rules for metric cards and modern styling."""
+    st.markdown(
+        """
+        <style>
+        .stMetric {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .stMetric label {
+            font-weight: 600;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 @st.cache_data
@@ -41,6 +59,7 @@ def load_data() -> pd.DataFrame:
     """Load application records from CSV file with parsed datetime columns."""
     df = pd.read_csv(DATA_PATH, parse_dates=["applied_on"])
     return df
+
 
 
 def filter_applications(
@@ -110,7 +129,9 @@ def calculate_company_response_rates(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main():
+    inject_custom_css()
     df = load_data()
+
 
     st.title("📊 Job Search Analytics Dashboard")
     st.caption(
