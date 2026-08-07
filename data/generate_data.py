@@ -126,4 +126,3 @@ if __name__ == "__main__":
     df.to_csv(args.output, index=False)
     print(f"Generated {len(df)} synthetic application records -> {args.output}")
     print(df.head())
-

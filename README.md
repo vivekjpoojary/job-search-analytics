@@ -1,5 +1,6 @@
 # 📊 Job Search Analytics Dashboard
 
+![CI Pipeline](https://github.com/Vivekjpoojary/job-search-analytics/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B?logo=streamlit)
 ![Plotly](https://img.shields.io/badge/Plotly-5.20%2B-3F4F75?logo=plotly)
@@ -28,8 +29,9 @@ pipeline the way a recruiter or BI analyst would track a sales funnel.
 - **Role type distribution** — Data Science / Analytics / SWE / AI-ML / IT Consulting
 - **Skill-gap frequency** — most commonly flagged missing skills across rejections
 - **Response rate by company type** — MNC vs Startup vs Mid-size vs Services
-- **Interactive filters** — role type, location, remote-only toggle
-- **Raw data explorer** — sortable/filterable table of all records
+- **Interactive filters** — role type, location, remote-only toggle, and application date range filter
+- **Raw data explorer & CSV export** — sortable/filterable table with 1-click CSV download
+- **Automated CI/CD** — GitHub Actions test suite running on every push and PR
 
 ## Tech Stack
 
@@ -39,15 +41,20 @@ pipeline the way a recruiter or BI analyst would track a sales funnel.
 | Dashboard framework | Streamlit |
 | Visualization | Plotly |
 | Data handling | Pandas / NumPy |
+| Testing & CI | Python Unittest / GitHub Actions |
 
 ## Project Structure
 
 ```
 job-search-analytics/
+├── .github/
+│   └── workflows/ci.yml    # GitHub Actions CI pipeline
 ├── app.py                  # Streamlit dashboard app
 ├── data/
 │   ├── generate_data.py    # Synthetic dataset generator
 │   └── applications.csv    # Generated dataset
+├── tests/
+│   └── test_data.py        # Automated test suite
 ├── .streamlit/
 │   └── config.toml         # Theme config
 ├── requirements.txt
