@@ -22,43 +22,47 @@ pipeline the way a recruiter or BI analyst would track a sales funnel.
 
 ## Features
 
-- **KPI summary** — total applications, response rate, interview conversion, offers, avg. response time
+- **KPI summary** — total applications, response rate, interview conversion, offers, avg. and median (P50) response times
+- **Automated Insights Engine** — dynamic, data-driven recommendations highlighting highest-converting org types and key skill bottlenecks
 - **Application funnel** — Applied → Online Assessment → Technical → HR → Offer
+- **Estimated Compensation (CTC) Analysis** — distribution of CTC ranges across role types
 - **Outcome breakdown** — donut chart of application outcomes
 - **Timeline** — weekly application volume
 - **Role type distribution** — Data Science / Analytics / SWE / AI-ML / IT Consulting
 - **Skill-gap frequency** — most commonly flagged missing skills across rejections
 - **Response rate by company type** — MNC vs Startup vs Mid-size vs Services
-- **Interactive filters** — role type, location, remote-only toggle, and application date range filter
+- **Multi-parameter filters** — company/skill keyword search, role type, location, remote toggle, and date range filter
 - **Raw data explorer & CSV export** — sortable/filterable table with 1-click CSV download
-- **Automated CI/CD** — GitHub Actions test suite running on every push and PR
+- **Automated CI/CD** — GitHub Actions test matrix across Python 3.10, 3.11, and 3.12
 
 ## Tech Stack
 
 | Layer | Tool |
 |---|---|
-| Language | Python 3 |
+| Language | Python 3.10+ |
 | Dashboard framework | Streamlit |
-| Visualization | Plotly |
+| Visualization | Plotly Express & Graph Objects |
 | Data handling | Pandas / NumPy |
-| Testing & CI | Python Unittest / GitHub Actions |
+| Testing & Quality | Python Unittest, Pytest, Coverage, Ruff |
+| CI/CD Pipeline | GitHub Actions Workflow |
 
 ## Project Structure
 
 ```
 job-search-analytics/
 ├── .github/
-│   └── workflows/ci.yml    # GitHub Actions CI pipeline
-├── app.py                  # Streamlit dashboard app
+│   └── workflows/ci.yml    # GitHub Actions CI matrix pipeline
+├── app.py                  # Streamlit dashboard app & UI layout
 ├── data/
-│   ├── generate_data.py    # Synthetic dataset generator
-│   └── applications.csv    # Generated dataset
+│   ├── generate_data.py    # Synthetic dataset generator with CTC modeling
+│   └── applications.csv    # Generated application dataset
 ├── tests/
-│   └── test_data.py        # Automated test suite
+│   └── test_data.py        # Comprehensive unit test suite (8 tests)
 ├── .streamlit/
-│   └── config.toml         # Theme config
-├── requirements.txt
-└── README.md
+│   └── config.toml         # Custom Streamlit theme config
+├── pyproject.toml          # Tooling configuration (pytest, coverage, ruff)
+├── requirements.txt        # Application dependencies
+└── README.md               # Project documentation
 ```
 
 ## Running Locally
@@ -72,6 +76,14 @@ streamlit run app.py
 
 The app will open at `http://localhost:8501`.
 
+## Running Tests
+
+Execute the automated test suite locally:
+
+```bash
+PYTHONPATH=. python -m unittest discover tests
+```
+
 ## Regenerating the Dataset
 
 The included `data/applications.csv` is **synthetic data** (randomly
@@ -81,7 +93,7 @@ To regenerate it with different parameters:
 
 ```bash
 cd data
-python generate_data.py
+python generate_data.py -n 85 -o applications.csv
 ```
 
 ## Deployment
