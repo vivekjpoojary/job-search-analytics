@@ -11,6 +11,7 @@ from app import (
     STAGE_ORDER,
     calculate_company_response_rates,
     calculate_kpis,
+    calculate_salary_stats,
     filter_applications,
     funnel_counts,
     load_data,
@@ -109,6 +110,21 @@ class TestJobSearchAnalytics(unittest.TestCase):
         mnc_rate = comp_df[comp_df["org_type"] == "MNC"]["response_rate"].values[0]
         self.assertEqual(startup_rate, 50.0)
         self.assertEqual(mnc_rate, 0.0)
+
+    def test_calculate_salary_stats(self):
+        sample_data = pd.DataFrame(
+            [
+                {"role_type": "Data Science", "estimated_ctc_lpa": 8.0},
+                {"role_type": "Data Science", "estimated_ctc_lpa": 10.0},
+                {"role_type": "SWE", "estimated_ctc_lpa": 6.0},
+            ]
+        )
+        salary_df = calculate_salary_stats(sample_data)
+        self.assertIn("role_type", salary_df.columns)
+        self.assertIn("mean_ctc", salary_df.columns)
+        ds_mean = salary_df[salary_df["role_type"] == "Data Science"]["mean_ctc"].values[0]
+        self.assertEqual(ds_mean, 9.0)
+
 
     def test_generate_applications(self):
         df_gen = generate_applications(20)

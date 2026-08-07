@@ -128,6 +128,17 @@ def calculate_company_response_rates(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
+def calculate_salary_stats(df: pd.DataFrame) -> pd.DataFrame:
+    """Calculate mean and median estimated CTC (in LPA) grouped by role type."""
+    if df.empty or "estimated_ctc_lpa" not in df.columns:
+        return pd.DataFrame(columns=["role_type", "mean_ctc", "median_ctc"])
+    grouped = df.groupby("role_type")["estimated_ctc_lpa"].agg(
+        mean_ctc="mean", median_ctc="median"
+    ).reset_index()
+    return grouped.round(2)
+
+
+
 def main():
     inject_custom_css()
     df = load_data()
@@ -261,6 +272,22 @@ def main():
         )
         fig6.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=350, showlegend=False)
         st.plotly_chart(fig6, width="stretch")
+
+    # ---------------- Row 4: Salary (CTC) Expectations ----------------
+    if "estimated_ctc_lpa" in filtered.columns:
+        st.subheader("Estimated CTC Range (LPA) by Role Type")
+        salary_df = calculate_salary_stats(filtered)
+        fig7 = px.bar(
+            salary_df,
+            x="role_type",
+            y="mean_ctc",
+            color="role_type",
+            text="mean_ctc",
+            labels={"mean_ctc": "Average CTC (LPA)", "role_type": "Role Type"},
+        )
+        fig7.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=350, showlegend=False)
+        st.plotly_chart(fig7, width="stretch")
+
 
     st.divider()
 
