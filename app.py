@@ -138,6 +138,39 @@ def calculate_salary_stats(df: pd.DataFrame) -> pd.DataFrame:
     return grouped.round(2)
 
 
+def generate_insights(df: pd.DataFrame) -> List[str]:
+    """Generate dynamic data-driven insights and action points based on applications."""
+    insights = []
+    if df.empty:
+        return ["No application data available for the current selection."]
+
+    comp_rates = calculate_company_response_rates(df)
+    if not comp_rates.empty:
+        best_org = comp_rates.sort_values("response_rate", ascending=False).iloc[0]
+        insights.append(
+            f"🎯 Highest response rate is from **{best_org['org_type']}** ({best_org['response_rate']:.1f}%)."
+        )
+
+    gaps = df["flagged_skill_gap"].dropna()
+    if not gaps.empty:
+        top_gap = gaps.value_counts().index[0]
+        gap_count = gaps.value_counts().iloc[0]
+        insights.append(
+            f"⚡ Top missing skill flagged in rejections/interviews is **{top_gap}** ({gap_count} occurrences)."
+        )
+
+    offers = (df["stage"] == "Offer").sum()
+    interviews = df["stage"].isin(["Technical Interview", "HR Interview", "Offer"]).sum()
+    if interviews > 0:
+        conv_rate = (offers / interviews) * 100
+        insights.append(
+            f"📈 Interview-to-Offer conversion rate is **{conv_rate:.1f}%** ({offers} offers from {interviews} interview stages)."
+        )
+
+    return insights
+
+
+
 
 def main():
     inject_custom_css()
@@ -192,7 +225,15 @@ def main():
     avg_resp = kpis["avg_response_days"]
     k5.metric("Avg. Response Time", f"{avg_resp:.0f} days" if pd.notna(avg_resp) else "—")
 
+    # Key Insights Section
+    insights = generate_insights(filtered)
+    if insights:
+        with st.expander("💡 Key Automated Insights & Recommendations", expanded=True):
+            for item in insights:
+                st.markdown(f"- {item}")
+
     st.divider()
+
 
     # ---------------- Row 1: Funnel + Stage breakdown ----------------
     c1, c2 = st.columns([1.2, 1])

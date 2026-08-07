@@ -14,6 +14,7 @@ from app import (
     calculate_salary_stats,
     filter_applications,
     funnel_counts,
+    generate_insights,
     load_data,
 )
 from data.generate_data import generate_applications
@@ -124,6 +125,23 @@ class TestJobSearchAnalytics(unittest.TestCase):
         self.assertIn("mean_ctc", salary_df.columns)
         ds_mean = salary_df[salary_df["role_type"] == "Data Science"]["mean_ctc"].values[0]
         self.assertEqual(ds_mean, 9.0)
+
+    def test_generate_insights(self):
+        sample_df = pd.DataFrame(
+            [
+                {"org_type": "Startup", "stage": "Offer", "flagged_skill_gap": "Docker"},
+                {"org_type": "Startup", "stage": "Technical Interview", "flagged_skill_gap": "Docker"},
+                {"org_type": "MNC", "stage": "Applied", "flagged_skill_gap": None},
+            ]
+        )
+        insights = generate_insights(sample_df)
+        self.assertTrue(len(insights) >= 2)
+        self.assertTrue(any("Startup" in item for item in insights))
+        self.assertTrue(any("Docker" in item for item in insights))
+
+        empty_insights = generate_insights(pd.DataFrame())
+        self.assertEqual(len(empty_insights), 1)
+
 
 
     def test_generate_applications(self):
