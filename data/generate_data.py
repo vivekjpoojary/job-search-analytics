@@ -96,6 +96,11 @@ def generate_applications(n=85):
         if stage != "Applied":
             days_to_response = int(np.random.gamma(3, 3))  # realistic right-skew
 
+        # Salary modeling (in LPA) based on company size and role
+        base_salary = {"MNC": 7.5, "Product": 8.0, "Services": 4.5, "Startup": 6.5, "Core/PSU": 6.0, "IT Services": 4.5, "IT Consulting": 5.5, "Product/Services": 5.0}.get(org_type, 5.0)
+        ctc_lpa = round(float(np.random.normal(base_salary, 1.2)), 1)
+        ctc_lpa = max(3.0, ctc_lpa)
+
         records.append({
             "application_id": f"APP-{i+1:03d}",
             "company": company,
@@ -109,6 +114,7 @@ def generate_applications(n=85):
             "stage": stage,
             "days_to_response": days_to_response,
             "flagged_skill_gap": skill_gap,
+            "estimated_ctc_lpa": ctc_lpa,
         })
 
     return pd.DataFrame(records)
