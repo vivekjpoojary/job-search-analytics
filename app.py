@@ -153,6 +153,42 @@ def calculate_salary_stats(df: pd.DataFrame) -> pd.DataFrame:
     return grouped.round(2)
 
 
+def calculate_source_performance(df: pd.DataFrame) -> pd.DataFrame:
+    """Calculate application count, response rate, and interview conversion rate by application source."""
+    if df.empty or "source" not in df.columns:
+        return pd.DataFrame(columns=["source", "total_apps", "response_rate", "interview_rate"])
+    records = []
+    for source, group in df.groupby("source"):
+        total = len(group)
+        responded = (~group["stage"].isin(["Applied"])).sum()
+        interviews = (group["stage"].isin(["Technical Interview", "HR Interview", "Offer"])).sum()
+        records.append({
+            "source": source,
+            "total_apps": total,
+            "response_rate": round((responded / total) * 100, 1),
+            "interview_rate": round((interviews / total) * 100, 1),
+        })
+    return pd.DataFrame(records).sort_values("total_apps", ascending=False)
+
+
+def identify_stale_applications(
+    df: pd.DataFrame,
+    days_threshold: int = 21,
+    reference_date: Optional[pd.Timestamp] = None,
+) -> pd.DataFrame:
+    """Identify applications stuck in 'Applied' state for longer than days_threshold."""
+    if df.empty or "stage" not in df.columns or "applied_on" not in df.columns:
+        return pd.DataFrame()
+    applied_only = df[df["stage"] == "Applied"].copy()
+    if applied_only.empty:
+        return pd.DataFrame()
+    ref_dt = pd.to_datetime(reference_date) if reference_date is not None else pd.to_datetime(df["applied_on"].max())
+    applied_only["applied_on"] = pd.to_datetime(applied_only["applied_on"])
+    applied_only["days_waiting"] = (ref_dt - applied_only["applied_on"]).dt.days
+    stale = applied_only[applied_only["days_waiting"] >= days_threshold].sort_values("days_waiting", ascending=False)
+    return stale
+
+
 def generate_insights(df: pd.DataFrame) -> List[str]:
     """Generate dynamic data-driven insights and action points based on applications."""
     insights = []
@@ -164,6 +200,13 @@ def generate_insights(df: pd.DataFrame) -> List[str]:
         best_org = comp_rates.sort_values("response_rate", ascending=False).iloc[0]
         insights.append(
             f"🎯 Highest response rate is from **{best_org['org_type']}** ({best_org['response_rate']:.1f}%)."
+        )
+
+    source_perf = calculate_source_performance(df)
+    if not source_perf.empty:
+        best_source = source_perf.sort_values("response_rate", ascending=False).iloc[0]
+        insights.append(
+            f"📌 Most responsive application channel is **{best_source['source']}** ({best_source['response_rate']:.1f}% response rate)."
         )
 
     gaps = df["flagged_skill_gap"].dropna()
@@ -182,7 +225,14 @@ def generate_insights(df: pd.DataFrame) -> List[str]:
             f"📈 Interview-to-Offer conversion rate is **{conv_rate:.1f}%** ({offers} offers from {interviews} interview stages)."
         )
 
+    stale_df = identify_stale_applications(df)
+    if not stale_df.empty:
+        insights.append(
+            f"⏳ **{len(stale_df)} pending applications** have been awaiting feedback for over 21 days."
+        )
+
     return insights
+
 
 
 
@@ -335,21 +385,50 @@ def main():
         fig6.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=350, showlegend=False)
         st.plotly_chart(fig6, width="stretch")
 
-    # ---------------- Row 4: Salary (CTC) Expectations ----------------
-    if "estimated_ctc_lpa" in filtered.columns:
-        st.subheader("Estimated CTC Range (LPA) by Role Type")
-        salary_df = calculate_salary_stats(filtered)
-        fig7 = px.bar(
-            salary_df,
-            x="role_type",
-            y="mean_ctc",
-            color="role_type",
-            text="mean_ctc",
-            labels={"mean_ctc": "Average CTC (LPA)", "role_type": "Role Type"},
-        )
-        fig7.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=350, showlegend=False)
-        st.plotly_chart(fig7, width="stretch")
+    # ---------------- Row 4: Source Performance + Salary Expectations ----------------
+    c7, c8 = st.columns(2)
 
+    with c7:
+        st.subheader("Performance by Application Channel")
+        source_df = calculate_source_performance(filtered)
+        if not source_df.empty:
+            fig7 = px.bar(
+                source_df,
+                x="source",
+                y=["response_rate", "interview_rate"],
+                barmode="group",
+                labels={"value": "Percentage (%)", "source": "Platform / Channel", "variable": "Metric"},
+            )
+            fig7.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=350)
+            st.plotly_chart(fig7, width="stretch")
+        else:
+            st.info("No source data available for current selection.")
+
+    with c8:
+        if "estimated_ctc_lpa" in filtered.columns:
+            st.subheader("Estimated CTC Range (LPA) by Role Type")
+            salary_df = calculate_salary_stats(filtered)
+            fig8 = px.bar(
+                salary_df,
+                x="role_type",
+                y="mean_ctc",
+                color="role_type",
+                text="mean_ctc",
+                labels={"mean_ctc": "Average CTC (LPA)", "role_type": "Role Type"},
+            )
+            fig8.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=350, showlegend=False)
+            st.plotly_chart(fig8, width="stretch")
+
+    # ---------------- SLA Warning Section ----------------
+    stale_apps = identify_stale_applications(filtered, days_threshold=21)
+    if not stale_apps.empty:
+        with st.expander(f"⏳ Pending Application SLA Warning ({len(stale_apps)} apps awaiting response > 21 days)", expanded=False):
+            st.warning("Applications submitted over 21 days ago without feedback update:")
+            st.dataframe(
+                stale_apps[["application_id", "company", "role_type", "source", "applied_on", "days_waiting"]],
+                width="stretch",
+                hide_index=True,
+            )
 
     st.divider()
 
