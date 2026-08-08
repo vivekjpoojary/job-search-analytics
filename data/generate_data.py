@@ -76,7 +76,11 @@ def random_date(start, end):
     delta = end - start
     return start + timedelta(days=random.randint(0, delta.days))
 
-def generate_applications(n=85):
+def generate_applications(n=85, seed=None):
+    if seed is not None:
+        random.seed(seed)
+        np.random.seed(seed)
+
     start_date = datetime(2026, 3, 1)
     end_date = datetime(2026, 8, 6)
 
@@ -126,9 +130,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate synthetic job application dataset.")
     parser.add_argument("-n", "--num-records", type=int, default=85, help="Number of records to generate (default: 85)")
     parser.add_argument("-o", "--output", type=str, default="applications.csv", help="Output CSV filepath")
+    parser.add_argument("-s", "--seed", type=int, default=None, help="Random seed for reproducible generation")
     args = parser.parse_args()
 
-    df = generate_applications(args.num_records)
+    df = generate_applications(args.num_records, seed=args.seed)
     df.to_csv(args.output, index=False)
     print(f"Generated {len(df)} synthetic application records -> {args.output}")
     print(df.head())
