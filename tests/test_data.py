@@ -12,9 +12,11 @@ from app import (
     calculate_company_response_rates,
     calculate_kpis,
     calculate_salary_stats,
+    calculate_source_performance,
     filter_applications,
     funnel_counts,
     generate_insights,
+    identify_stale_applications,
     load_data,
 )
 from data.generate_data import generate_applications
@@ -155,6 +157,36 @@ class TestJobSearchAnalytics(unittest.TestCase):
 
 
 
+    def test_calculate_source_performance(self):
+        sample_df = pd.DataFrame(
+            [
+                {"source": "LinkedIn", "stage": "Applied"},
+                {"source": "LinkedIn", "stage": "Technical Interview"},
+                {"source": "Naukri", "stage": "Applied"},
+            ]
+        )
+        perf_df = calculate_source_performance(sample_df)
+        self.assertIn("source", perf_df.columns)
+        self.assertIn("response_rate", perf_df.columns)
+        self.assertIn("interview_rate", perf_df.columns)
+        linkedin_row = perf_df[perf_df["source"] == "LinkedIn"].iloc[0]
+        self.assertEqual(linkedin_row["response_rate"], 50.0)
+        self.assertEqual(linkedin_row["interview_rate"], 50.0)
+
+    def test_identify_stale_applications(self):
+        sample_df = pd.DataFrame(
+            [
+                {"application_id": "APP-001", "stage": "Applied", "applied_on": "2026-07-01"},
+                {"application_id": "APP-002", "stage": "Applied", "applied_on": "2026-07-30"},
+                {"application_id": "APP-003", "stage": "Technical Interview", "applied_on": "2026-06-01"},
+            ]
+        )
+        stale_df = identify_stale_applications(
+            sample_df, days_threshold=20, reference_date=pd.Timestamp("2026-08-01")
+        )
+        self.assertEqual(len(stale_df), 1)
+        self.assertEqual(stale_df.iloc[0]["application_id"], "APP-001")
+
     def test_generate_applications(self):
         df_gen = generate_applications(20)
         self.assertEqual(len(df_gen), 20)
@@ -170,6 +202,12 @@ class TestJobSearchAnalytics(unittest.TestCase):
         }
         self.assertTrue(set(df_gen["stage"].unique()).issubset(valid_stages))
 
+    def test_generate_applications_with_seed(self):
+        df1 = generate_applications(15, seed=123)
+        df2 = generate_applications(15, seed=123)
+        pd.testing.assert_frame_equal(df1, df2)
+
 
 if __name__ == "__main__":
     unittest.main()
+
