@@ -23,8 +23,10 @@ pipeline the way a recruiter or BI analyst would track a sales funnel.
 ## Features
 
 - **KPI summary** — total applications, response rate, interview conversion, offers, avg. and median (P50) response times
-- **Automated Insights Engine** — dynamic, data-driven recommendations highlighting highest-converting org types and key skill bottlenecks
+- **Automated Insights Engine** — dynamic, data-driven recommendations highlighting highest-converting org types, top channel performance, and key skill bottlenecks
 - **Application funnel** — Applied → Online Assessment → Technical → HR → Offer
+- **Application Channel Performance** — breakdown of response rate % and interview rate % across platforms (LinkedIn, Naukri, Referrals, Instahyre, etc.)
+- **Pending SLA Tracker** — automated warning system detecting applications stuck in "Applied" state over 21 days
 - **Estimated Compensation (CTC) Analysis** — distribution of CTC ranges across role types
 - **Outcome breakdown** — donut chart of application outcomes
 - **Timeline** — weekly application volume
@@ -54,10 +56,10 @@ job-search-analytics/
 │   └── workflows/ci.yml    # GitHub Actions CI matrix pipeline
 ├── app.py                  # Streamlit dashboard app & UI layout
 ├── data/
-│   ├── generate_data.py    # Synthetic dataset generator with CTC modeling
+│   ├── generate_data.py    # Synthetic dataset generator with seed support & CTC modeling
 │   └── applications.csv    # Generated application dataset
 ├── tests/
-│   └── test_data.py        # Comprehensive unit test suite (8 tests)
+│   └── test_data.py        # Comprehensive unit test suite (11 tests)
 ├── .streamlit/
 │   └── config.toml         # Custom Streamlit theme config
 ├── pyproject.toml          # Tooling configuration (pytest, coverage, ruff)
@@ -89,11 +91,11 @@ PYTHONPATH=. python -m unittest discover tests
 The included `data/applications.csv` is **synthetic data** (randomly
 generated with realistic distributions) — not real personal application
 records, since actual application details aren't meant for a public repo.
-To regenerate it with different parameters:
+To regenerate it with different parameters or a fixed seed:
 
 ```bash
 cd data
-python generate_data.py -n 85 -o applications.csv
+python generate_data.py -n 85 --seed 42 -o applications.csv
 ```
 
 ## Deployment
