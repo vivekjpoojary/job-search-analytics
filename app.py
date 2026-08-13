@@ -11,7 +11,7 @@ Run locally:
 """
 
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -189,6 +189,55 @@ def identify_stale_applications(
     return stale
 
 
+def calculate_application_velocity(
+    df: pd.DataFrame, reference_date: Optional[pd.Timestamp] = None
+) -> Dict[str, Any]:
+    """Calculate application submission velocity metrics including 7-day total, 30-day total, WoW change, and peak submission day."""
+    if df.empty or "applied_on" not in df.columns:
+        return {
+            "apps_last_7d": 0,
+            "apps_prev_7d": 0,
+            "apps_last_30d": 0,
+            "wow_change_pct": 0.0,
+            "peak_day_of_week": "N/A",
+            "avg_weekly_velocity": 0.0,
+        }
+
+    applied_dates = pd.to_datetime(df["applied_on"])
+    ref_dt = pd.to_datetime(reference_date) if reference_date is not None else applied_dates.max()
+
+    cutoff_7d = ref_dt - pd.Timedelta(days=7)
+    cutoff_14d = ref_dt - pd.Timedelta(days=14)
+    cutoff_30d = ref_dt - pd.Timedelta(days=30)
+
+    count_7d = int(((applied_dates > cutoff_7d) & (applied_dates <= ref_dt)).sum())
+    count_prev_7d = int(((applied_dates > cutoff_14d) & (applied_dates <= cutoff_7d)).sum())
+    count_30d = int(((applied_dates > cutoff_30d) & (applied_dates <= ref_dt)).sum())
+
+    if count_prev_7d > 0:
+        wow_change_pct = round(((count_7d - count_prev_7d) / count_prev_7d) * 100, 1)
+    elif count_7d > 0:
+        wow_change_pct = 100.0
+    else:
+        wow_change_pct = 0.0
+
+    day_names = applied_dates.dt.day_name()
+    peak_day = day_names.value_counts().index[0] if not day_names.empty else "N/A"
+
+    date_span = (applied_dates.max() - applied_dates.min()).days
+    weeks = max(1.0, date_span / 7.0)
+    avg_weekly_velocity = round(len(df) / weeks, 1)
+
+    return {
+        "apps_last_7d": count_7d,
+        "apps_prev_7d": count_prev_7d,
+        "apps_last_30d": count_30d,
+        "wow_change_pct": wow_change_pct,
+        "peak_day_of_week": peak_day,
+        "avg_weekly_velocity": avg_weekly_velocity,
+    }
+
+
 def generate_insights(df: pd.DataFrame) -> List[str]:
     """Generate dynamic data-driven insights and action points based on applications."""
     insights = []
@@ -200,6 +249,13 @@ def generate_insights(df: pd.DataFrame) -> List[str]:
         best_org = comp_rates.sort_values("response_rate", ascending=False).iloc[0]
         insights.append(
             f"🎯 Highest response rate is from **{best_org['org_type']}** ({best_org['response_rate']:.1f}%)."
+        )
+
+    velocity = calculate_application_velocity(df)
+    if velocity["apps_last_7d"] > 0:
+        trend_str = f"+{velocity['wow_change_pct']}%" if velocity['wow_change_pct'] >= 0 else f"{velocity['wow_change_pct']}%"
+        insights.append(
+            f"🚀 Application velocity: **{velocity['apps_last_7d']} apps in last 7 days** ({trend_str} vs previous 7d). Peak day: **{velocity['peak_day_of_week']}**."
         )
 
     source_perf = calculate_source_performance(df)
@@ -285,6 +341,8 @@ def main():
 
     # ---------------- KPI row ----------------
     kpis = calculate_kpis(filtered)
+    velocity = calculate_application_velocity(filtered)
+
     k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("Total Applications", kpis["total_apps"])
     k2.metric("Response Rate", f"{kpis['response_rate']:.0f}%")
@@ -294,6 +352,17 @@ def main():
     med_resp = kpis["median_response_days"]
     k5.metric("Avg. Response Time", f"{avg_resp:.0f} days" if pd.notna(avg_resp) else "—")
     k6.metric("Median Response Time", f"{med_resp:.0f} days" if pd.notna(med_resp) else "—")
+
+    v1, v2, v3, v4 = st.columns(4)
+    v1.metric(
+        "Velocity (Last 7d)",
+        velocity["apps_last_7d"],
+        delta=f"{velocity['wow_change_pct']}% WoW" if velocity["apps_prev_7d"] > 0 else None,
+    )
+    v2.metric("Volume (Last 30d)", velocity["apps_last_30d"])
+    v3.metric("Weekly Pace", f"{velocity['avg_weekly_velocity']} / wk")
+    v4.metric("Peak Submission Day", velocity["peak_day_of_week"])
+
 
 
     # Key Insights Section
