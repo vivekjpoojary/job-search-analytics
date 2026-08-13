@@ -132,6 +132,40 @@ def funnel_counts(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame({"stage": list(reached.keys()), "count": list(reached.values())})
 
 
+def calculate_stage_conversion_rates(df: pd.DataFrame) -> pd.DataFrame:
+    """Calculate step-by-step conversion rates between consecutive funnel stages."""
+    if df.empty:
+        return pd.DataFrame(
+            columns=["transition", "from_stage", "to_stage", "from_count", "to_count", "conversion_rate"]
+        )
+
+    funnel = funnel_counts(df)
+    stages = list(funnel["stage"])
+    counts = list(funnel["count"])
+
+    records = []
+    for i in range(len(stages) - 1):
+        from_stage = stages[i]
+        to_stage = stages[i + 1]
+        from_cnt = counts[i]
+        to_cnt = counts[i + 1]
+        rate = round((to_cnt / from_cnt) * 100, 1) if from_cnt > 0 else 0.0
+        transition = f"{from_stage} ➔ {to_stage}"
+        records.append(
+            {
+                "transition": transition,
+                "from_stage": from_stage,
+                "to_stage": to_stage,
+                "from_count": from_cnt,
+                "to_count": to_cnt,
+                "conversion_rate": rate,
+            }
+        )
+
+    return pd.DataFrame(records)
+
+
+
 def calculate_company_response_rates(df: pd.DataFrame) -> pd.DataFrame:
     """Calculate response rate percentage grouped by company organization type."""
     if df.empty:
@@ -389,8 +423,25 @@ def main():
                 marker={"color": ["#4C78A8", "#72B7B2", "#54A24B", "#EECA3B", "#E45756"]},
             )
         )
-        fig.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=380)
+        fig.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=320)
         st.plotly_chart(fig, width="stretch")
+
+        conv_df = calculate_stage_conversion_rates(filtered)
+        if not conv_df.empty:
+            with st.expander("🔍 Step-by-Step Conversion Rates", expanded=False):
+                st.dataframe(
+                    conv_df[["transition", "from_count", "to_count", "conversion_rate"]].rename(
+                        columns={
+                            "transition": "Stage Transition",
+                            "from_count": "Entering Count",
+                            "to_count": "Advancing Count",
+                            "conversion_rate": "Conversion %",
+                        }
+                    ),
+                    width="stretch",
+                    hide_index=True,
+                )
+
 
     with c2:
         st.subheader("Outcome Breakdown")
