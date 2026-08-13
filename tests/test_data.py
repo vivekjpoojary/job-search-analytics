@@ -9,10 +9,12 @@ import pandas as pd
 
 from app import (
     STAGE_ORDER,
+    calculate_application_velocity,
     calculate_company_response_rates,
     calculate_kpis,
     calculate_salary_stats,
     calculate_source_performance,
+    calculate_stage_conversion_rates,
     filter_applications,
     funnel_counts,
     generate_insights,
@@ -207,7 +209,51 @@ class TestJobSearchAnalytics(unittest.TestCase):
         df2 = generate_applications(15, seed=123)
         pd.testing.assert_frame_equal(df1, df2)
 
+    def test_calculate_application_velocity(self):
+        sample_df = pd.DataFrame(
+            [
+                {"applied_on": "2026-08-01"},
+                {"applied_on": "2026-07-31"},
+                {"applied_on": "2026-07-25"},
+                {"applied_on": "2026-07-20"},
+                {"applied_on": "2026-07-05"},
+            ]
+        )
+        velocity = calculate_application_velocity(
+            sample_df, reference_date=pd.Timestamp("2026-08-01")
+        )
+        self.assertEqual(velocity["apps_last_7d"], 3)  # 08-01, 07-31, 07-25
+        self.assertEqual(velocity["apps_prev_7d"], 1)  # 07-20
+        self.assertEqual(velocity["wow_change_pct"], 200.0)
+        self.assertEqual(velocity["apps_last_30d"], 5)
+
+        empty_vel = calculate_application_velocity(pd.DataFrame())
+        self.assertEqual(empty_vel["apps_last_7d"], 0)
+        self.assertEqual(empty_vel["peak_day_of_week"], "N/A")
+
+    def test_calculate_stage_conversion_rates(self):
+        sample_df = pd.DataFrame(
+            [
+                {"stage": "Applied"},
+                {"stage": "Applied"},
+                {"stage": "Online Assessment"},
+                {"stage": "Technical Interview"},
+                {"stage": "Offer"},
+            ]
+        )
+        conv_df = calculate_stage_conversion_rates(sample_df)
+        self.assertFalse(conv_df.empty)
+        self.assertIn("transition", conv_df.columns)
+        self.assertIn("conversion_rate", conv_df.columns)
+        # 5 applied, 3 reached OA => 60%
+        oa_row = conv_df[conv_df["from_stage"] == "Applied"].iloc[0]
+        self.assertEqual(oa_row["conversion_rate"], 60.0)
+
+        empty_conv = calculate_stage_conversion_rates(pd.DataFrame())
+        self.assertTrue(empty_conv.empty)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 

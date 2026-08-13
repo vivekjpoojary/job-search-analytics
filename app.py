@@ -244,9 +244,9 @@ def calculate_application_velocity(
     cutoff_14d = ref_dt - pd.Timedelta(days=14)
     cutoff_30d = ref_dt - pd.Timedelta(days=30)
 
-    count_7d = int(((applied_dates > cutoff_7d) & (applied_dates <= ref_dt)).sum())
-    count_prev_7d = int(((applied_dates > cutoff_14d) & (applied_dates <= cutoff_7d)).sum())
-    count_30d = int(((applied_dates > cutoff_30d) & (applied_dates <= ref_dt)).sum())
+    count_7d = int(((applied_dates >= cutoff_7d) & (applied_dates <= ref_dt)).sum())
+    count_prev_7d = int(((applied_dates >= cutoff_14d) & (applied_dates < cutoff_7d)).sum())
+    count_30d = int(((applied_dates >= cutoff_30d) & (applied_dates <= ref_dt)).sum())
 
     if count_prev_7d > 0:
         wow_change_pct = round(((count_7d - count_prev_7d) / count_prev_7d) * 100, 1)
