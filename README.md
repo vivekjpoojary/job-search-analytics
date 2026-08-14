@@ -35,7 +35,7 @@ pipeline the way a recruiter or BI analyst would track a sales funnel.
 - **Response Rate by Company Type** — MNC vs Startup vs Mid-size vs Services
 - **Multi-Parameter Filters** — company/skill keyword search, role type, location, remote toggle, and date range filter
 - **Raw Data Explorer & CSV Export** — sortable/filterable table with 1-click CSV download
-- **Automated CI/CD** — GitHub Actions test matrix across Python 3.10, 3.11, 3.12, and 3.13
+- **Automated CI/CD** — GitHub Actions automated workflow matrix running unit tests across Python 3.10, 3.11, 3.12, and 3.13
 
 ## Tech Stack
 
