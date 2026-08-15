@@ -107,6 +107,7 @@ This app deploys for free on [Streamlit Community Cloud](https://streamlit.io/cl
 
 ## Roadmap / Ideas for Extension
 
+- [x] Automated CI workflow for test suite execution across Python versions
 - [ ] Connect to a live Google Sheets tracker instead of static CSV
 - [ ] Add a "predicted response likelihood" model (ties into ML skills)
 - [ ] Export filtered view as PDF report
