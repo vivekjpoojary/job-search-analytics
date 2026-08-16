@@ -80,10 +80,17 @@ The app will open at `http://localhost:8501`.
 
 ## Running Tests
 
-Execute the automated test suite locally:
+Execute the automated test suite and coverage reporting locally:
 
 ```bash
+# Run tests via unittest
 PYTHONPATH=. python -m unittest discover tests
+
+# Or run tests via pytest
+pytest
+
+# Generate code coverage report
+coverage run -m pytest && coverage report
 ```
 
 ## Regenerating the Dataset
